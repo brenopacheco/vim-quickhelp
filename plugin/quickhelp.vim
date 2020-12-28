@@ -12,9 +12,4 @@ if !exists('g:quickhelp_show_clippy')
     let g:quickhelp_show_clippy = v:true
 endif
 
-augroup quickhelp
-    au!
-    au BufNew,BufNewFile,BufReadPost * 
-        \ call quickhelp#load() | 
-        \ exec 'nnoremap ' . g:quickhelp_map . ' :call quickhelp#open()<CR>'
-augroup END
+exec 'nnoremap ' . g:quickhelp_map . ' :call quickhelp#open()<CR>'

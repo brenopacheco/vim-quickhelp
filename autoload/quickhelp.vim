@@ -3,7 +3,7 @@
 " Description: 
 " Last Modified: 
 
-let clippy = 
+let s:clippy = 
             \ [ " ╭──╮   ",
             \   " │  │   ",
             \   " @  @  ╭",
@@ -23,7 +23,7 @@ let s:map = {}
 " displayed when calling quickhelp#open().
 fun! quickhelp#register(filetype, help)
     if type(a:help) != 3
-        echoerr "Help argument must be a list of strings."
+        echomsg "Help argument must be a list of strings."
         return
     endif
     let s:map[a:filetype] = a:help
@@ -47,7 +47,7 @@ fun! quickhelp#open(...)
             echo join(s:map[ft], "\n")
         endif
     else
-        echoerr "Filetype has no quickhelp set."
+        echomsg "Filetype has no quickhelp set."
     endif
 endf
 
@@ -60,7 +60,7 @@ endf
 fun! s:merge(list1, list2)
     return map(
             \ range(
-                \ max( [ len(list1), len(list2) ])),
-            \ '(v:key >= len(list1) ? repeat(" ", strwidth(list1[0])) : list1[v:key]) 
-            \ . (v:key >= len(list2) ? repeat(" ", strwidth(list2[0])) : list2[v:key]) ')
+                \ max( [ len(a:list1), len(a:list2) ])),
+            \ '(v:key >= len(a:list1) ? repeat(" ", strwidth(a:list1[0])) : a:list1[v:key]) 
+            \ . (v:key >= len(a:list2) ? repeat(" ", strwidth(a:list2[0])) : a:list2[v:key]) ')
 endf
