@@ -12,4 +12,9 @@ if !exists('g:quickhelp_show_clippy')
     let g:quickhelp_show_clippy = v:true
 endif
 
-exec 'nnoremap ' . g:quickhelp_map . ' :call quickhelp#open()<CR>'
+" echo, floating
+if !exists('g:quickhelp_display')
+    let g:quickhelp_display = "floating"
+endif
+
+exec 'nnoremap <silent> ' . g:quickhelp_map . ' :call quickhelp#open()<CR>'

@@ -1,8 +1,19 @@
 
-let s:help1 =
-    \ [
-    \    "<c-n>       next file",
-    \    "<c-p>       previous file"]
+
+let g:quickhelp_show_clippy = v:true
+let g:quickhelp_display = "floating"
+let s:help1 = [
+    \ "##vimdiff commands",
+    \ "",
+    \ "]c          - next difference",
+    \ "[c          - previous difference",
+    \ "do          - diff obtain",
+    \ "dp          - diff put",
+    \ "zo          - open folded text",
+    \ "zc          - close folded text",
+    \ ":diffupdate - re-scan the files for differences",
+    \ ":diffthis   - activate diff for file" ]
+
 
 let s:help2 =
     \ [
