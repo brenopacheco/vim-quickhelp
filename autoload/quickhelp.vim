@@ -47,36 +47,45 @@ fun! quickhelp#open(...)
     endif
     let quickhelp = ""
     if g:quickhelp_show_clippy
-        let quickhelp = s:merge(s:clippy, s:enbox(s:merge(s:map[&ft], [])))
+        let quickhelp = s:merge(s:clippy, s:enbox(s:merge(s:map[ft], [])))
     else
         let quickhelp = s:enbox(s:merge(s:map[ft], []))
     endif
     if g:quickhelp_display == "echo"
         echo join(quickhelp, "\n")
     elseif g:quickhelp_display == "floating"
-        let buffer = nvim_create_buf(0,1)
-        silent exec 'nnoremap <silent> ' . g:quickhelp_map . ' :call quickhelp#reset('.buffer.')<CR>'
-        silent call appendbufline(buffer, 0, quickhelp)
-        silent call nvim_open_win(buffer, v:false, {
+        let buffer = bufadd('___quickhelp___')
+        silent call nvim_open_win(buffer, v:true, {
             \   'relative': 'editor',
             \   'width': strdisplaywidth(quickhelp[0]),
-            \   'height': len(quickhelp)-1,
+            \   'height': len(quickhelp),
             \   'col': &columns - strdisplaywidth(quickhelp[0]),
             \   'row': &lines - len(quickhelp) - &cmdheight,
             \   'style': 'minimal'
             \ })
-        set bufhidden=wipe
+        setlocal noswapfile bufhidden=wipe nowrap nobuflisted 
+            \ buftype=nofile nolist modifiable
+        call deletebufline(buffer, 1, "$")
+        call appendbufline(buffer, 0, quickhelp)
+        call deletebufline(buffer, "$")
+        " call deletebufline(buffer, "$")
+        setlocal nomodifiable
+        set ft=quickhelp
+        wincmd p
     else
         echomsg "Invalid g:quickhelp_display."
     endif
 endf
 
-fun! quickhelp#reset(buf)
-    if bufexists(a:buf)
-        silent call nvim_buf_delete(a:buf, { "force": 1 })
-        silent exec 'nnoremap <silent>' . g:quickhelp_map . ' :call quickhelp#open()<CR>'
+fun! quickhelp#close()
+    exec bufnr('___quickhelp___') . 'bw!'
+endf
+
+fun! quickhelp#toggle(args)
+    if bufexists('___quickhelp___')
+        call quickhelp#close()
     else
-        silent call quickhelp#open()
+        call quickhelp#open(a:args)
     endif
 endf
 
